@@ -1,12 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import type React from 'react'
 import type { Client } from './shared/domain'
 import styles from './App.module.css'
-
 import AutoTextarea from './components/AutoTextarea'
 import {
-  addClientImmutable,
-  removeClientById,
-  updateClientImmutable,
   filterAndSortClients,
   validateClientInput,
   clientLabelForDelete,
@@ -31,11 +28,19 @@ export default function App() {
   const [reviewName, setReviewName] = useState('')
   const [reviewNote, setReviewNote] = useState('')
 
+  useEffect(() => {
+  window.api.listClients().then(setClients)
+}, [])
+
+async function refreshClients() {
+  setClients(await window.api.listClients())
+}
+
   // --- Aktionen ---
   function startEdit(c: Client) {
     setEditingId(c.id)
     setDraftName(c.name)
-    setDraftNote(c.note ?? '')
+    setDraftNote(c.notes ?? '')
   }
 
   function cancelEdit() {
@@ -65,17 +70,22 @@ export default function App() {
     setReviewOpen(true)
   }
 
-  // Review bestätigen => wirklich speichern
-  function confirmReview() {
+ async function confirmReview() {
+  try {
     if (reviewMode === 'create') {
-      setClients(prev => addClientImmutable(prev, reviewName, reviewNote))
+      await window.api.addClient(reviewName, reviewNote)
       setName(''); setNote('')
     } else if (reviewMode === 'edit' && editingId != null) {
-      setClients(prev => updateClientImmutable(prev, editingId, reviewName, reviewNote))
+      await window.api.updateClient(editingId, reviewName, reviewNote)
       cancelEdit()
     }
+    await refreshClients()
     closeReview()
+  } catch (err) {
+    alert('Speichern fehlgeschlagen: ' + (err as Error).message)
   }
+}
+
 
   function closeReview() {
     setReviewOpen(false)
@@ -84,26 +94,32 @@ export default function App() {
     setReviewNote('')
   }
 
-  // Löschen (mit Bestätigung)
-  function removeClient(id: number) {
-    const label = clientLabelForDelete(clients, id)
-    const ok = window.confirm(`Klient „${label}“ wirklich löschen?`)
-    if (!ok) return
-    if (editingId === id) cancelEdit()
-    setClients(prev => removeClientById(prev, id))
-  }
+  async function removeClient(id: number) {
+  const label = clientLabelForDelete(clients, id)
+  if (!window.confirm(`Klient „${label}“ wirklich löschen?`)) return
+  if (editingId === id) cancelEdit()
 
-  // Enter/Escape im Edit-Modus
-  function onEditKeyDown(e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      openReviewForEdit()
-    }
-    if (e.key === 'Escape') {
-      e.preventDefault()
-      cancelEdit()
-    }
+  try {
+    await window.api.deleteClient(id)
+    // Optimistic Update: direkt in der UI entfernen (kein sofortiger Reload)
+    setClients(prev => prev.filter(c => c.id !== id))
+    // optional später im Hintergrund synchronisieren:
+    // void refreshClients()
+  } catch (e) {
+    alert('Löschen fehlgeschlagen: ' + (e as Error).message)
   }
+}
+
+const onEditKeyDown: React.KeyboardEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault()
+    openReviewForEdit()
+  }
+  if (e.key === 'Escape') {
+    e.preventDefault()
+    cancelEdit()
+  }
+}
 
   // --- abgeleitet ---
   const filteredSorted = useMemo(
@@ -123,7 +139,7 @@ export default function App() {
   // --- UI ---
   return (
     <main className={styles.main}>
-      <h1>Notizia – Mini-CRUD (ohne DB)</h1>
+      <h1>Notizia – Desktop(SQLite)</h1>
 
       {/* Neu anlegen */}
       <section className={styles.form}>
@@ -180,10 +196,10 @@ export default function App() {
                   {!isEditing ? (
                     <>
                       {c.name}
-                      {c.note ? (
+                      {c.notes ? (
                         <div className={styles.note}>
                           <div className={styles.noteLabel}>Notiz:</div>
-                          <pre className={styles.notePre}>{c.note}</pre>
+                          <pre className={styles.notePre}>{c.notes}</pre>
                         </div>
                       ) : null}
                     </>
