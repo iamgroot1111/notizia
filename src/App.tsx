@@ -8,6 +8,8 @@ import {
   validateClientInput,
   clientLabelForDelete,
 } from './shared/clients'
+import ClientCases from './components/ClientCases'
+
 
 type ReviewMode = 'create' | 'edit' | null
 
@@ -185,69 +187,83 @@ const onEditKeyDown: React.KeyboardEventHandler<HTMLInputElement | HTMLTextAreaE
       </section>
 
       {/* Liste */}
-      <ul className={styles.list}>
-        {filteredSorted.map((c) => {
-          const isEditing = c.id === editingId
-          return (
-            <li key={c.id} className={`${styles.item} ${isEditing ? styles.editing : ''}`}>
-              <div className={styles.row}>
-                <div style={{ flex: 1 }}>
-                  <strong>#{c.id}</strong>{' '}
-                  {!isEditing ? (
-                    <>
-                      {c.name}
-                      {c.notes ? (
-                        <div className={styles.note}>
-                          <div className={styles.noteLabel}>Notiz:</div>
-                          <pre className={styles.notePre}>{c.notes}</pre>
-                        </div>
-                      ) : null}
-                    </>
-                  ) : (
-                    <div className={styles.editFields}>
-                      <label>
-                        Name:{' '}
-                        <input
-                          value={draftName}
-                          onChange={(e) => setDraftName(e.target.value)}
-                          onKeyDown={onEditKeyDown}
-                          className={saveCheck.errors.name ? styles.invalid : undefined}
-                        />
-                      </label>
-                      {saveCheck.errors.name && <small className={styles.hint}>{saveCheck.errors.name}</small>}
+      {/* Liste */}
+<ul className={styles.list}>
+  {filteredSorted.map((c) => {
+    const isEditing = c.id === editingId
+    return (
+      <li key={c.id} className={`${styles.item} ${isEditing ? styles.editing : ''}`}>
+        <div className={styles.row}>
+          {/* Linke Spalte: Inhalt / Edit-Form */}
+          <div style={{ flex: 1 }}>
+            <strong>#{c.id}</strong>{' '}
+            {!isEditing ? (
+              <>
+                {c.name}
+                {c.notes ? (
+                  <div className={styles.note}>
+                    <div className={styles.noteLabel}>Notiz:</div>
+                    <pre className={styles.notePre}>{c.notes}</pre>
+                  </div>
+                ) : null}
+              </>
+            ) : (
+              <div className={styles.editFields}>
+                <label>
+                  Name:{' '}
+                  <input
+                    value={draftName}
+                    onChange={(e) => setDraftName(e.target.value)}
+                    onKeyDown={onEditKeyDown}
+                    className={saveCheck.errors.name ? styles.invalid : undefined}
+                  />
+                </label>
+                {saveCheck.errors.name && (
+                  <small className={styles.hint}>{saveCheck.errors.name}</small>
+                )}
 
-                      <label>
-                        Notiz:{' '}
-                        <AutoTextarea
-                          value={draftNote}
-                          onChange={(e) => setDraftNote(e.target.value)}
-                          onKeyDown={onEditKeyDown}
-                          className={`${styles.textarea} ${saveCheck.errors.note ? styles.invalid : ''}`}
-                        />
-                      </label>
-                      {saveCheck.errors.note && <small className={styles.hint}>{saveCheck.errors.note}</small>}
-                    </div>
-                  )}
-                </div>
-
-                <div className={styles.actions}>
-                  {!isEditing ? (
-                    <>
-                      <button onClick={() => startEdit(c)}>Bearbeiten</button>
-                      <button onClick={() => removeClient(c.id)}>Löschen</button>
-                    </>
-                  ) : (
-                    <>
-                      <button onClick={openReviewForEdit} disabled={!canSave}>Speichern</button>
-                      <button onClick={cancelEdit} className={styles.btnSecondary}>Abbrechen</button>
-                    </>
-                  )}
-                </div>
+                <label>
+                  Notiz:{' '}
+                  <AutoTextarea
+                    value={draftNote}
+                    onChange={(e) => setDraftNote(e.target.value)}
+                    onKeyDown={onEditKeyDown}
+                    className={`${styles.textarea} ${saveCheck.errors.note ? styles.invalid : ''}`}
+                  />
+                </label>
+                {saveCheck.errors.note && (
+                  <small className={styles.hint}>{saveCheck.errors.note}</small>
+                )}
               </div>
-            </li>
-          )
-        })}
-      </ul>
+            )}
+          </div>
+
+          {/* Rechte Spalte: Buttons */}
+          <div className={styles.actions}>
+            {!isEditing ? (
+              <>
+                <button onClick={() => startEdit(c)}>Bearbeiten</button>
+                <button onClick={() => removeClient(c.id)}>Löschen</button>
+              </>
+            ) : (
+              <>
+                <button onClick={openReviewForEdit} disabled={!canSave}>Speichern</button>
+                <button onClick={cancelEdit} className={styles.btnSecondary}>Abbrechen</button>
+              </>
+            )}
+          </div>
+        </div> {/* ← Ende .row */}
+
+        {/* ▼ Fälle & Sitzungen NACH der Zeile (nur wenn nicht im Edit-Modus) */}
+        {!isEditing && (
+          <div style={{ marginTop: 10 }}>
+            <ClientCases clientId={c.id} />
+          </div>
+        )}
+      </li>
+    )
+  })}
+</ul>
 
       {clients.length === 0 && <p className={styles.hint}>Noch keine Klienten angelegt.</p>}
 

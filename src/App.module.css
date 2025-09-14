@@ -30,50 +30,50 @@
 }
 
 .note {
-  margin-top: 6px; 
+  margin-top: 6px;
 }
 
 .empty {
   opacity: 0.7;
 }
 
-.hint { 
-  opacity: 0.7; 
+.hint {
+  opacity: 0.7;
 }
-.actions { 
+.actions {
   display: flex;
-  gap: 8px; 
-  align-items: center; 
+  gap: 8px;
+  align-items: center;
   flex-wrap: wrap;
 }
 
-.editFields { 
-  display: grid; 
-  gap: 6px; 
-  margin-top: 6px; 
+.editFields {
+  display: grid;
+  gap: 6px;
+  margin-top: 6px;
 }
-.editing { 
-  background: #f9fbff; 
+.editing {
+  background: #f9fbff;
 } /* zarter Hintergrund für Edit-Zeile */
 
 /* Optional: sekundärer Button */
-.btnSecondary { 
-  opacity: .85; 
+.btnSecondary {
+  opacity: 0.85;
 }
 .textarea {
   width: 100%;
   box-sizing: border-box;
   font: inherit;
-  min-height: 140px;      /* Start groß */
-  max-height: 60vh;       /* nie mehr als 60% viewport-höhe */
-  overflow: auto;         /* bei sehr viel Text scrollen */
-  resize: vertical;       /* manuell höher ziehen */
+  min-height: 140px; /* Start groß */
+  max-height: 60vh; /* nie mehr als 60% viewport-höhe */
+  overflow: auto; /* bei sehr viel Text scrollen */
+  resize: vertical; /* manuell höher ziehen */
   padding: 8px;
 }
 
-.noteLabel { 
-  font-weight: 600; 
-  margin-bottom: 2px; 
+.noteLabel {
+  font-weight: 600;
+  margin-bottom: 2px;
 }
 
 .notePre {
@@ -81,14 +81,16 @@
   margin: 0;
   opacity: 0.9;
 }
-.invalid { 
-  outline: 2px solid #e33; 
+.invalid {
+  outline: 2px solid #e33;
 }
 /* Modal (Review-Dialog) */
 .modalOverlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.35);
-  display: grid; place-items: center;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: grid;
+  place-items: center;
   z-index: 1000;
 }
 .modal {
@@ -96,28 +98,66 @@
   width: min(720px, 94vw);
   max-height: 86vh;
   border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.2);
-  display: grid; grid-template-rows: auto 1fr auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
 }
-.modalHeader { 
-  padding: 16px 18px; 
-  border-bottom: 1px solid #eee; 
-  font-size: 18px; 
-  font-weight: 700; 
+.modalHeader {
+  padding: 16px 18px;
+  border-bottom: 1px solid #eee;
+  font-size: 18px;
+  font-weight: 700;
 }
-.modalBody   { 
-  padding: 14px 18px; 
-  overflow: auto; 
-  display: grid; 
-  gap: 10px; 
+.modalBody {
+  padding: 14px 18px;
+  overflow: auto;
+  display: grid;
+  gap: 10px;
 }
-.modalActions  { 
-  padding: 12px 18px; 
-  border-top: 1px solid #eee; 
-  display: flex; 
-  gap: 10px; 
-  justify-content: flex-end; 
+.modalActions {
+  padding: 12px 18px;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
 }
-.btnSecondary { 
-  opacity: .9; 
+.btnSecondary {
+  opacity: 0.9;
+}
+
+.caseBlock {
+  margin-top: 12px;
+}
+
+.card {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 12px;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.rowGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.kv {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 8px;
+  align-items: center;
+}
+.tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f5f7fb;
 }
