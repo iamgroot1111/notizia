@@ -1,13 +1,67 @@
-.main {
-  max-width: 800px;
-  margin: 40px auto;
-  font-family: system-ui, sans-serif;
+:root {
+  --bg: #f5fbf7;
+  --card-bg: #fff;
+  --text: #0f172a;
+  --primary: #2e7d32; /* grün */
+  --primary-100: #e6f4ea; /* zart grün */
+  --danger: #d32f2f;
+  --muted: #6b7280;
+}
+
+/* ---------- Page ---------- */
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.container {
+  max-width: 1000px;
+  margin: 24px auto 60px;
+  padding: 0 16px;
+}
+
+.headerWrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.logo {
+  /* größer */
+  width: clamp(76px, 12vw, 96px);
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.title {
+  /* etwas kleiner */
+  font-size: clamp(18px, 2.1vw, 16px);
+  line-height: 1.2;
+  margin: 0;
+}
+
+/* ---------- Cards & Layout ---------- */
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.formGrid {
+  display: grid;
+  gap: 8px;
 }
 
 .form {
+  /* Suchbereich etc. */
   display: grid;
   gap: 8px;
-  margin-bottom: 16px;
+  margin: 16px 0; /* Abstand nach oben, wie gewünscht */
 }
 
 .list {
@@ -18,28 +72,18 @@
 }
 
 .item {
-  border: 1px solid #ddd;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
   padding: 12px;
-  border-radius: 10px;
 }
 
 .row {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
 }
 
-.note {
-  margin-top: 6px;
-}
-
-.empty {
-  opacity: 0.7;
-}
-
-.hint {
-  opacity: 0.7;
-}
 .actions {
   display: flex;
   gap: 8px;
@@ -53,38 +97,89 @@
   margin-top: 6px;
 }
 .editing {
-  background: #f9fbff;
-} /* zarter Hintergrund für Edit-Zeile */
-
-/* Optional: sekundärer Button */
-.btnSecondary {
-  opacity: 0.85;
+  background: #f7fbff;
 }
+
+/* ---------- Inputs & Buttons ---------- */
+
+.input {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: #fff;
+}
+
+.inputInvalid {
+  border-color: #cc5a5a;
+  box-shadow: 0 0 0 3px rgba(204, 90, 90, 0.1);
+}
+.inputOk {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.12);
+}
+
 .textarea {
   width: 100%;
   box-sizing: border-box;
   font: inherit;
-  min-height: 140px; /* Start groß */
-  max-height: 60vh; /* nie mehr als 60% viewport-höhe */
-  overflow: auto; /* bei sehr viel Text scrollen */
-  resize: vertical; /* manuell höher ziehen */
+  min-height: 100px; /* kleinerer Start */
+  max-height: 60vh; /* nie höher als 60% des Screens */
+  overflow: auto; /* bei viel Text scrollen */
+  resize: vertical;
   padding: 8px;
 }
 
+.btn {
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.btnPrimary {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+.btnSecondary {
+  opacity: 0.9;
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* schlankere Felder */
+.narrowLg {
+  max-width: 560px;
+} /* Klientenname */
+.narrowMd {
+  max-width: 420px;
+} /* Suche */
+
+/* ---------- Notes ---------- */
+
+.note {
+  margin-top: 6px;
+}
 .noteLabel {
   font-weight: 600;
   margin-bottom: 2px;
 }
-
 .notePre {
-  white-space: pre-wrap; /* Zeilenumbrüche erhalten */
+  white-space: pre-wrap;
   margin: 0;
   opacity: 0.9;
 }
-.invalid {
-  outline: 2px solid #e33;
+.hint,
+.empty {
+  opacity: 0.7;
 }
-/* Modal (Review-Dialog) */
+
+/* ---------- Modal (Review) ---------- */
+
 .modalOverlay {
   position: fixed;
   inset: 0;
@@ -121,43 +216,56 @@
   gap: 10px;
   justify-content: flex-end;
 }
-.btnSecondary {
-  opacity: 0.9;
-}
+
+/* ---------- Cases/Sessions (ClientCases) ---------- */
 
 .caseBlock {
   margin-top: 12px;
 }
 
-.card {
-  border: 1px solid #eee;
-  border-radius: 12px;
-  padding: 12px;
-}
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
 }
+
 .rowGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
+
 .toolbar {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
+
 .kv {
   display: grid;
   grid-template-columns: 140px 1fr;
   gap: 8px;
   align-items: center;
 }
+
 .tag {
   padding: 2px 8px;
   border-radius: 999px;
   background: #f5f7fb;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 640px) {
+  .rowGrid {
+    grid-template-columns: 1fr;
+  } /* 2 Spalten -> 1 Spalte */
+  .kv {
+    grid-template-columns: 1fr;
+  } /* Label über Input */
+  .narrowLg,
+  .narrowMd {
+    max-width: 100%;
+  }
 }
